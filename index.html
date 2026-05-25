@@ -1,3 +1,6 @@
+---
+layout: null
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,8 +17,6 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Righteous&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Removed external Lottie player dependency for 100% stability -->
-
   <!-- 🧠 GEO & SEO STRUCTURED DATA (JSON-LD) 🧠 -->
   <script type="application/ld+json">
   {
@@ -23,19 +24,19 @@
     "@graph": [
       {
         "@type": "Organization",
-        "@id": "https://ttcquiz.github.io/#organization",
+        "@id": "{{ site.url }}{{ site.baseurl }}/#organization",
         "name": "Tushar Tuition Classes (TTC)",
-        "url": "https://ttcquiz.github.io",
+        "url": "{{ site.url }}{{ site.baseurl }}",
         "logo": "https://i.postimg.cc/x9mDND2Q/Ttc-logo.png",
         "description": "Tushar Tuition Classes provides premium offline tuition and free online CBSE-aligned quizzes for Class 6 to 10 students in Wardha."
       },
       {
         "@type": "WebSite",
-        "@id": "https://ttcquiz.github.io/#website",
-        "url": "https://ttcquiz.github.io",
+        "@id": "{{ site.url }}{{ site.baseurl }}/#website",
+        "url": "{{ site.url }}{{ site.baseurl }}",
         "name": "TTC Quiz Platform",
         "publisher": {
-          "@id": "https://ttcquiz.github.io/#organization"
+          "@id": "{{ site.url }}{{ site.baseurl }}/#organization"
         }
       },
       {
@@ -184,7 +185,7 @@
       .header-cta { display: block; }
     }
 
-    /* Redesigned Hero Section with Lottie */
+    /* Redesigned Hero Section */
     .hero-wrapper {
       max-width: 1200px;
       margin: 0 auto;
@@ -504,6 +505,7 @@
     .c-maths::before { background: var(--blue); }
     .c-science::before { background: var(--lime); }
     .c-english::before { background: var(--pink); }
+    .c-default::before { background: var(--orange); }
 
     .card-meta {
       display: flex;
@@ -818,7 +820,7 @@
 
   <!-- HEADER -->
   <header>
-    <a href="/" class="brand">
+    <a href="{{ site.baseurl }}/" class="brand">
       <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" alt="TTC Logo">
       <div>
         <div class="brand-text">TTC <span>QUIZ</span></div>
@@ -906,71 +908,39 @@
     <section class="quiz-container">
       <div class="grid" id="quizGrid">
         
-        <!-- Example Quiz Card 1 -->
-        <a href="/quizzes/class-7-maths-integers.html" class="card c-maths" data-class="class-7" data-subject="maths" data-title="integers maths class 7">
-          <div class="card-meta">
-            <span class="class-tag">Class 7</span>
-            <span class="q-count">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              30 Qs
-            </span>
-          </div>
-          <h3>Integers</h3>
-          <p>Test your fundamental understanding of adding, subtracting, multiplying, and dividing integers.</p>
-          <div class="card-footer">
-            <span class="subj-tag" style="color: var(--blue);">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>
-              Maths
-            </span>
-            <div class="play-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            </div>
-          </div>
-        </a>
+        <!-- This loop dynamically creates cards based on your _quizzes folder -->
+        {% for quiz in site.quizzes %}
+        {% assign subjColorClass = "c-default" %}
+        {% if quiz.subject == 'Maths' %}{% assign subjColorClass = "c-maths" %}{% endif %}
+        {% if quiz.subject == 'Science' %}{% assign subjColorClass = "c-science" %}{% endif %}
+        {% if quiz.subject == 'English' %}{% assign subjColorClass = "c-english" %}{% endif %}
 
-        <!-- Example Quiz Card 2 -->
-        <a href="/quizzes/class-9-english-grandmother.html" class="card c-english" data-class="class-9" data-subject="english" data-title="how i taught my grandmother to read english class 9">
+        {% assign subjTextColor = "var(--orange)" %}
+        {% if quiz.subject == 'Maths' %}{% assign subjTextColor = "var(--blue)" %}{% endif %}
+        {% if quiz.subject == 'Science' %}{% assign subjTextColor = "var(--lime)" %}{% endif %}
+        {% if quiz.subject == 'English' %}{% assign subjTextColor = "var(--pink)" %}{% endif %}
+
+        <a href="{{ quiz.url | relative_url }}" class="card {{ subjColorClass }}" data-class="{{ quiz.class | downcase | replace: ' ', '-' }}" data-subject="{{ quiz.subject | downcase }}" data-title="{{ quiz.title | downcase }} {{ quiz.subject | downcase }} {{ quiz.class | downcase }}">
           <div class="card-meta">
-            <span class="class-tag">Class 9</span>
+            <span class="class-tag">{{ quiz.class }}</span>
             <span class="q-count">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              39 Qs
+              {{ quiz.questions }} Qs
             </span>
           </div>
-          <h3>How I Taught My Grandmother to Read</h3>
-          <p>Comprehensive literature check on Sudha Murty's heartwarming chapter.</p>
+          <h3>{{ quiz.title }}</h3>
+          <p>{{ quiz.description }}</p>
           <div class="card-footer">
-            <span class="subj-tag" style="color: var(--pink);">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
-              English
+            <span class="subj-tag" style="color: {{ subjTextColor }};">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>
+              {{ quiz.subject }}
             </span>
             <div class="play-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             </div>
           </div>
         </a>
-        
-        <!-- Example Quiz Card 3 (Placeholder) -->
-        <a href="#" class="card c-science" data-class="class-10" data-subject="science" data-title="chemical reactions equations science class 10">
-          <div class="card-meta">
-            <span class="class-tag">Class 10</span>
-            <span class="q-count">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              25 Qs
-            </span>
-          </div>
-          <h3>Chemical Reactions</h3>
-          <p>Balancing equations, types of reactions, and essential chemistry concepts.</p>
-          <div class="card-footer">
-            <span class="subj-tag" style="color: var(--lime);">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21.5a4 4 0 1 1-4-4h4Z"></path><path d="M15 21.5a4 4 0 1 0 4-4h-4Z"></path><path d="M12 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path></svg>
-              Science
-            </span>
-            <div class="play-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            </div>
-          </div>
-        </a>
+        {% endfor %}
 
         <!-- No Results -->
         <div class="no-results" id="noResults">
@@ -1101,7 +1071,7 @@
       
       <div class="seo-links">
         <a href="https://g.page/r/CdUkswJ0ZulAEBE/review" target="_blank">Join Offline Classes</a>
-        <a href="#">Sitemap</a>
+        <a href="{{ site.baseurl }}/sitemap.xml">Sitemap</a>
         <a href="#">Contact Us</a>
       </div>
     </div>
