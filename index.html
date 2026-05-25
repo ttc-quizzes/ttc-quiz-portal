@@ -886,7 +886,7 @@ layout: null
         {% if quiz.subject == 'Science' %}{% assign subjTextColor = "var(--lime)" %}{% endif %}
         {% if quiz.subject == 'English' %}{% assign subjTextColor = "var(--pink)" %}{% endif %}
 
-        <a href="{{ site.url }}{{ quiz.url }}" class="card {{ subjColorClass }}" data-class="{{ quiz.class | downcase | replace: ' ', '-' }}" data-subject="{{ quiz.subject | downcase }}" data-title="{{ quiz.title | downcase }} {{ quiz.subject | downcase }} {{ quiz.class | downcase }}">
+        <a href="{{ site.baseurl }}{{ quiz.url }}" class="card {{ subjColorClass }}" data-class="{{ quiz.class | downcase | replace: ' ', '-' }}" data-subject="{{ quiz.subject | downcase }}" data-title="{{ quiz.title | downcase }} {{ quiz.subject | downcase }} {{ quiz.class | downcase }}">
           <div class="card-meta">
             <span class="class-tag">{{ quiz.class }}</span>
             <span class="q-count">{{ quiz.questions }} Qs</span>
