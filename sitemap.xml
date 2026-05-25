@@ -1,25 +1,23 @@
+---
+layout: null
+---
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <!-- TTC Quiz Portal Homepage -->
   <url>
-    <loc>https://ttcquiz.github.io/</loc>
+    <loc>{{ site.url }}/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- Class 9 Quizzes -->
+  <!-- Auto-Generated Quiz Links -->
+  {% for quiz in site.quizzes %}
   <url>
-    <loc>https://ttcquiz.github.io/quizzes/class-9-english-grandmother.html</loc>
+    <loc>{{ site.url }}{{ quiz.url }}</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Class 7 Quizzes -->
-  <url>
-    <loc>https://ttcquiz.github.io/quizzes/class-7-maths-integers.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  {% endfor %}
 
 </urlset>
