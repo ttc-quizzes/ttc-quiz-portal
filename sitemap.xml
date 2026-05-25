@@ -4,17 +4,15 @@ layout: null
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
-  <!-- TTC Quiz Portal Homepage -->
   <url>
-    <loc>{{ site.url }}/</loc>
+    <loc>{{ site.url }}{{ site.baseurl }}/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- Auto-Generated Quiz Links -->
   {% for quiz in site.quizzes %}
   <url>
-    <loc>{{ site.url }}{{ quiz.url }}</loc>
+    <loc>{{ site.url }}{{ site.baseurl }}{{ quiz.url }}</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
