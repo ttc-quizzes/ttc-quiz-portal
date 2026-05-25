@@ -1,0 +1,9 @@
+name: TTC Quiz Platform
+description: Master your subjects with TTC Quiz. Free, instant-scored online quizzes for Class 6 to 10.
+url: "https://ttcquiz.github.io"
+
+# This tells Jekyll to automatically generate pages from the _quizzes folder
+collections:
+  quizzes:
+    output: true
+    permalink: /quizzes/:name.html
