@@ -2,7 +2,7 @@
   "name": "TTC Quiz Platform",
   "short_name": "TTC Quiz",
   "description": "Master your subjects with TTC Quiz. Free, instant-scored online quizzes for Class 6 to 10 with detailed explanations. Created by Tushar Tuition Classes, Wardha.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#F8F9FA",
   "theme_color": "#4361EE",
