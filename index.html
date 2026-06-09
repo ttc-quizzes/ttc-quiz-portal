@@ -1231,14 +1231,26 @@ layout: null
     </section>
 
     <!-- FILTERING (AUTOMATED WITH JEKYLL) -->
-    <div class="filters" id="filterContainer">
-      <button class="filter-btn active" data-filter="all">All Quizzes</button>
+    <div class="filters" id="classFilterContainer" style="margin-bottom: 12px;">
+      <button class="filter-btn class-filter-btn active" data-class="all">All Classes</button>
       
       <!-- This dynamically creates filter buttons based on unique classes in your quizzes -->
       {% assign unique_classes = site.quizzes | map: 'class' | uniq | sort %}
       {% for cls in unique_classes %}
         {% if cls %}
-        <button class="filter-btn" data-filter="{{ cls | downcase | replace: ' ', '-' }}">{{ cls }}</button>
+        <button class="filter-btn class-filter-btn" data-class="{{ cls | downcase | replace: ' ', '-' }}">{{ cls }}</button>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="filters" id="subjectFilterContainer">
+      <button class="filter-btn subject-filter-btn active" data-subject="all">All Subjects</button>
+      
+      <!-- This dynamically creates filter buttons based on unique subjects in your quizzes -->
+      {% assign unique_subjects = site.quizzes | map: 'subject' | uniq | sort %}
+      {% for subj in unique_subjects %}
+        {% if subj %}
+        <button class="filter-btn subject-filter-btn" data-subject="{{ subj | downcase }}">{{ subj }}</button>
         {% endif %}
       {% endfor %}
     </div>
@@ -1455,14 +1467,23 @@ layout: null
     }
 
     // --- 1. FILTER & SEARCH LOGIC ---
-    const filterBtns = document.querySelectorAll('.filter-btn');
+    const classFilterBtns = document.querySelectorAll('.class-filter-btn');
+    const subjectFilterBtns = document.querySelectorAll('.subject-filter-btn');
     const cards = document.querySelectorAll('.card');
     const searchInput = document.getElementById('searchInput');
     const noResults = document.getElementById('noResults');
 
-    filterBtns.forEach(btn => {
+    classFilterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
+        classFilterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterQuizzes();
+      });
+    });
+
+    subjectFilterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        subjectFilterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         filterQuizzes();
       });
@@ -1471,18 +1492,21 @@ layout: null
     searchInput.addEventListener('input', filterQuizzes);
 
     function filterQuizzes() {
-      const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+      const activeClassFilter = document.querySelector('.class-filter-btn.active').dataset.class;
+      const activeSubjectFilter = document.querySelector('.subject-filter-btn.active').dataset.subject;
       const searchTerm = searchInput.value.toLowerCase().trim();
       let visibleCount = 0;
 
       cards.forEach(card => {
         const cardClass = card.dataset.class;
+        const cardSubject = card.dataset.subject;
         const cardTitle = card.dataset.title;
 
-        const matchesClass = activeFilter === 'all' || activeFilter === cardClass;
+        const matchesClass = activeClassFilter === 'all' || activeClassFilter === cardClass;
+        const matchesSubject = activeSubjectFilter === 'all' || activeSubjectFilter === cardSubject;
         const matchesSearch = searchTerm === '' || cardTitle.includes(searchTerm);
 
-        if (matchesClass && matchesSearch) {
+        if (matchesClass && matchesSubject && matchesSearch) {
           card.style.display = 'flex';
           visibleCount++;
         } else {
