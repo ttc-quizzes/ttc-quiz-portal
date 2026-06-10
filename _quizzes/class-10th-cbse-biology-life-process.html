@@ -448,62 +448,130 @@ p.sub { font-size: 14px; color: var(--grey); font-weight: 500; margin-bottom: 20
   100% { opacity:0; transform: translateY(-30px) scale(0.5); }
 }
 
-/* Sword icons flanking button text */
-.challenge-btn-inner { display:flex; align-items:center; justify-content:center; gap:8px; }
-.sword-icon {
-  font-size:18px;
-  display:inline-block;
-  animation: swordWiggle 1.8s ease-in-out infinite;
+/* ── Challenge Button: Lottie + VS watermark ── */
+.challenge-btn-inner {
+  display:flex; align-items:center; justify-content:center;
+  gap:8px; position:relative; z-index:1;
 }
-.sword-icon.left  { animation-direction: normal; }
-.sword-icon.right { animation-direction: reverse; }
-@keyframes swordWiggle {
-  0%,100%{ transform: rotate(-10deg) scale(1); }
-  50%    { transform: rotate(10deg) scale(1.1); }
+.challenge-btn-lottie {
+  width: 28px; height: 28px; flex-shrink: 0;
+  display: block; pointer-events: none;
+}
+/* VS watermark pattern stamped across the button */
+.btn-challenge::after {
+  content: 'VS VS VS VS VS VS VS VS VS VS VS VS VS';
+  position: absolute; inset: 0;
+  font-family: 'Fredoka One', cursive;
+  font-size: 44px; letter-spacing: 10px;
+  color: rgba(255,255,255,0.055);
+  display: flex; align-items: center; overflow: hidden;
+  white-space: nowrap; pointer-events: none;
+  transform: rotate(-6deg) scale(1.15);
+  padding-left: 8px;
 }
 
-/* ── Challenge Banner on Name Screen ── */
+/* ── Card Challenge-Mode: Full card dark takeover ── */
+.card.challenge-mode {
+  background: linear-gradient(160deg, #080810 0%, #160430 55%, #0b1850 100%) !important;
+  border-color: #7C3AED !important;
+  box-shadow: 8px 8px 0 #7C3AED !important;
+}
+.card.challenge-mode::before {
+  background: linear-gradient(90deg, #7C3AED, #FF3D8A, #4361EE, #C8FF00) !important;
+}
+.card.challenge-mode .logo {
+  border-color: #7C3AED; box-shadow: 3px 3px 0 #7C3AED;
+}
+.card.challenge-mode #nameChip {
+  background: #7C3AED; color: #fff;
+  border-color: rgba(255,255,255,0.3);
+  box-shadow: 2px 2px 0 rgba(255,255,255,0.15);
+}
+.card.challenge-mode #nameH2 { color: rgba(255,255,255,0.9); }
+.card.challenge-mode #nameSub { color: rgba(255,255,255,0.45); }
+.card.challenge-mode .input-field {
+  background: rgba(255,255,255,0.07);
+  color: #fff; border-color: rgba(255,255,255,0.18);
+  box-shadow: 3px 3px 0 rgba(124,58,237,0.5);
+}
+.card.challenge-mode .input-field::placeholder { color: rgba(255,255,255,0.3); }
+.card.challenge-mode .input-field:focus {
+  border-color: #C8FF00; box-shadow: 3px 3px 0 #C8FF00;
+}
+
+/* ── Challenge Incoming Banner: VS Card Layout ── */
 .challenge-incoming-banner {
   display: none;
-  background: linear-gradient(135deg, #1a0533, #0d1f6e);
-  border: 2.5px solid var(--dark);
-  border-radius: 20px;
-  padding: 18px 16px 14px;
-  margin-bottom: 18px;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  box-shadow: 5px 5px 0 var(--dark);
+  width: 100%; margin-bottom: 20px;
 }
-.challenge-incoming-banner.show { display: block; animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1); }
-.cib-bg-glow {
-  position:absolute; inset:0; border-radius:18px; overflow:hidden; pointer-events:none;
-  background: radial-gradient(ellipse at 50% -20%, rgba(124,58,237,0.4), transparent 70%);
+.challenge-incoming-banner.show {
+  display: block; animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1);
 }
-.cib-swords { font-size: 28px; display:block; margin-bottom:6px; animation: swordsClash 1.5s ease-in-out infinite; }
-@keyframes swordsClash {
-  0%,100%{ transform: scale(1) rotate(-5deg); }
-  50%    { transform: scale(1.15) rotate(5deg); }
+.cib-top-bar {
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
 }
-.cib-label {
-  font-family: 'Righteous', cursive;
-  font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,0.55);
-  text-transform: uppercase; display:block; margin-bottom:4px; position:relative;z-index:1;
+.cib-badge {
+  background: linear-gradient(135deg, #FF3D8A, #7C3AED);
+  color: #fff; font-family: 'Fredoka One', cursive;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  padding: 5px 18px; border-radius: 50px;
+  border: 1.5px solid rgba(255,255,255,0.2);
 }
-.cib-headline {
-  font-family: 'Fredoka One', cursive;
-  font-size: 21px; color: #fff; line-height: 1.25;
-  display:block; margin-bottom:6px; position:relative;z-index:1;
+.cib-vs-row {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  margin-bottom: 12px;
 }
-.cib-headline span { color: #C8FF00; }
-.cib-score-badge {
-  display:inline-flex; align-items:center; gap:6px;
-  background: rgba(255,255,255,0.12); border: 1.5px solid rgba(255,255,255,0.2);
-  border-radius: 50px; padding: 4px 14px;
-  font-family: 'Righteous', cursive; font-size: 14px; color: #fff;
-  position:relative;z-index:1;
+.cib-player-card {
+  flex: 1; border-radius: 16px; padding: 12px 8px; text-align: center;
 }
-.cib-score-badge .s-num { font-size:18px; color:#C8FF00; font-weight:900; }
+.cib-challenger-card {
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.1);
+}
+.cib-you-card {
+  background: rgba(200,255,0,0.07);
+  border: 1.5px solid rgba(200,255,0,0.18);
+}
+.cib-player-label {
+  font-size: 9px; letter-spacing: 2px; font-weight: 800;
+  text-transform: uppercase; display: block; margin-bottom: 4px;
+}
+.cib-challenger-card .cib-player-label { color: rgba(255,255,255,0.38); }
+.cib-you-card .cib-player-label { color: rgba(200,255,0,0.55); }
+.cib-player-name {
+  font-family: 'Fredoka One', cursive; font-size: 17px;
+  color: #fff; display: block; margin-bottom: 4px; word-break: break-word;
+  line-height: 1.15;
+}
+.cib-player-score {
+  font-family: 'Fredoka One', cursive; font-size: 30px;
+  color: #C8FF00; line-height: 1; display: block;
+}
+.cib-player-score-sub {
+  font-size: 9px; letter-spacing: 1px; color: rgba(255,255,255,0.3);
+  text-transform: uppercase; display: block; margin-top: 3px;
+}
+.cib-you-question {
+  font-family: 'Fredoka One', cursive; font-size: 17px;
+  color: #C8FF00; display: block; margin-bottom: 4px;
+}
+.cib-you-beat-it {
+  font-family: 'Righteous', cursive; font-size: 13px;
+  color: rgba(200,255,0,0.7); letter-spacing: 1px; display: block;
+}
+.cib-vs-pill {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka One', cursive; font-size: 12px; color: #fff;
+}
+.cib-footer {
+  background: rgba(255,255,255,0.04); border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.07); padding: 8px 12px;
+  font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.38);
+  text-align: center; letter-spacing: 0.3px;
+}
 
 /* ── VS Banner on Result Screen ── */
 .vs-banner {
@@ -726,23 +794,34 @@ p.sub { font-size: 14px; color: var(--grey); font-weight: 500; margin-bottom: 20
  
 <div class="app" id="quizApp">
   <div id="nameScreen" class="screen active">
-    <div class="card" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="card" id="nameCard" style="display:flex;flex-direction:column;align-items:center;">
       <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" class="logo" alt="TTC">
 
-      <!-- ⚔️ Challenge Incoming Banner (shown only when ?c= param present) -->
+      <!-- Challenge Incoming Banner: VS Card Layout (shown only when ?c= param present) -->
       <div class="challenge-incoming-banner" id="challengeIncomingBanner">
-        <div class="cib-bg-glow"></div>
-        <span class="cib-swords">⚔️</span>
-        <span class="cib-label">You've been challenged!</span>
-        <span class="cib-headline" id="cibHeadline">Someone challenged you!<br>Can you <span>beat their score?</span></span>
-        <div class="cib-score-badge">
-          🏆 They scored: <span class="s-num" id="cibScoreDisplay">?</span>
+        <div class="cib-top-bar">
+          <span class="cib-badge">Challenge Incoming</span>
         </div>
+        <div class="cib-vs-row">
+          <div class="cib-player-card cib-challenger-card">
+            <span class="cib-player-label">Challenger</span>
+            <span class="cib-player-name" id="cibChallengerName">Player</span>
+            <span class="cib-player-score" id="cibChallengerScore">?</span>
+            <span class="cib-player-score-sub">their score</span>
+          </div>
+          <div class="cib-vs-pill">VS</div>
+          <div class="cib-player-card cib-you-card">
+            <span class="cib-player-label">You</span>
+            <span class="cib-you-question">???</span>
+            <span class="cib-you-beat-it">Beat it!</span>
+          </div>
+        </div>
+        <div class="cib-footer" id="cibFooter">Enter your name below to accept the challenge</div>
       </div>
 
-      <div class="chip" id="nameChip">✦ TTC Wardha</div>
+      <div class="chip" id="nameChip">TTC Wardha</div>
       <h2 id="nameH2">Hey there!<br>What's your name?</h2>
-      <p class="sub" id="nameSub">Enter your name to start the quiz 🎯</p>
+      <p class="sub" id="nameSub">Enter your name to start the quiz</p>
       <input id="username" class="input-field" type="text" placeholder="Your full name..." autocomplete="off" required>
       <button class="btn btn-blue" onclick="startWelcome()">Continue →</button>
     </div>
@@ -890,9 +969,7 @@ p.sub { font-size: 14px; color: var(--grey); font-weight: 500; margin-bottom: 20
         <div class="vs-result-label" id="vsResultLabel">🏆 Challenge Result</div>
       </div>
 
-      <button class="btn btn-green" onclick="shareWhatsApp()">📤 Share on WhatsApp</button>
-
-      <!-- ⚔️ Challenge a Friend Button -->
+      <!-- Challenge a Friend Button — placed first, most prominent -->
       <div class="challenge-btn-wrap" id="challengeBtnWrap">
         <div class="c-particle"></div>
         <div class="c-particle"></div>
@@ -901,12 +978,22 @@ p.sub { font-size: 14px; color: var(--grey); font-weight: 500; margin-bottom: 20
         <div class="c-particle"></div>
         <button class="btn btn-challenge" onclick="shareChallenge()" id="challengeBtn">
           <span class="challenge-btn-inner">
-            <span class="sword-icon left">⚔️</span>
-            <span>Challenge a Friend!</span>
-            <span class="sword-icon right">⚔️</span>
+            <lottie-player
+              src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f525/lottie.json"
+              background="transparent" speed="1"
+              class="challenge-btn-lottie" loop autoplay>
+            </lottie-player>
+            <span>Challenge a Friend</span>
+            <lottie-player
+              src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f525/lottie.json"
+              background="transparent" speed="1"
+              class="challenge-btn-lottie" loop autoplay>
+            </lottie-player>
           </span>
         </button>
       </div>
+
+      <button class="btn btn-green" onclick="shareWhatsApp()">Share on WhatsApp</button>
 
       <button class="btn btn-blue" onclick="downloadStudentPdf()">Download PDF Report</button>
       <button id="ratingBtn" class="btn btn-pink">⭐ Rate Us on Google</button>
@@ -1190,21 +1277,25 @@ let challengeData = null; // {n: name, s: score, t: total}
     const decoded = JSON.parse(atob(raw));
     if (decoded && decoded.n && typeof decoded.s === 'number' && typeof decoded.t === 'number') {
       challengeData = decoded;
-      // Update name screen UI
-      const banner = document.getElementById('challengeIncomingBanner');
-      const headline = document.getElementById('cibHeadline');
-      const scoreEl = document.getElementById('cibScoreDisplay');
-      const chip = document.getElementById('nameChip');
-      const h2 = document.getElementById('nameH2');
-      const sub = document.getElementById('nameSub');
-      if (banner) {
-        if (headline) headline.innerHTML = `⚔️ <span>${challengeData.n}</span> has challenged you!<br>They scored <span>${challengeData.s}/${challengeData.t}</span>. Can you beat them?`;
-        if (scoreEl) scoreEl.textContent = `${challengeData.s}/${challengeData.t}`;
-        banner.classList.add('show');
-      }
-      if (chip) chip.textContent = '⚔️ Challenge Accepted!';
-      if (h2) h2.innerHTML = `Enter your name<br>and play the quiz!`;
-      if (sub) sub.textContent = `⚔️ ${challengeData.n} has challenged you! They scored ${challengeData.s}/${challengeData.t}. Enter your name and play the quiz to see if you can beat them!`;
+
+      // VS Card Banner
+      const banner   = document.getElementById('challengeIncomingBanner');
+      const nameEl   = document.getElementById('cibChallengerName');
+      const scoreEl  = document.getElementById('cibChallengerScore');
+      const footerEl = document.getElementById('cibFooter');
+      const nameCard = document.getElementById('nameCard');
+      const chip     = document.getElementById('nameChip');
+      const h2       = document.getElementById('nameH2');
+      const sub      = document.getElementById('nameSub');
+
+      if (nameEl)   nameEl.textContent  = challengeData.n;
+      if (scoreEl)  scoreEl.textContent = `${challengeData.s}/${challengeData.t}`;
+      if (footerEl) footerEl.textContent = `${challengeData.n} scored ${challengeData.s}/${challengeData.t} — enter your name to play`;
+      if (banner)   banner.classList.add('show');
+      if (nameCard) nameCard.classList.add('challenge-mode');
+      if (chip) chip.textContent = 'Challenge Accepted';
+      if (h2)  h2.innerHTML = `Who are you?`;
+      if (sub) sub.textContent = `Enter your name to accept the challenge`;
     }
   } catch(e) {}
 })();
