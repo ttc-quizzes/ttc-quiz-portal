@@ -394,6 +394,185 @@ p.sub { font-size: 14px; color: var(--grey); font-weight: 500; margin-bottom: 20
 .hidden { display: none !important; }
 
 /* ═══════════════════════════════════
+   CHALLENGE A FRIEND STYLES
+═══════════════════════════════════ */
+
+/* ── Challenge Button ── */
+.btn-challenge {
+  background: linear-gradient(135deg, #7C3AED, #4361EE, #FF3D8A);
+  background-size: 300% 300%;
+  animation: challengeGradient 3s ease infinite;
+  color: white;
+  border: 2.5px solid var(--dark);
+  position: relative;
+  overflow: hidden;
+}
+@keyframes challengeGradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.btn-challenge::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: -100%;
+  width: 60%; height: calc(100% + 4px);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  animation: challengeShimmer 2s linear infinite;
+  border-radius: 14px;
+}
+@keyframes challengeShimmer { from { left: -60%; } to { left: 160%; } }
+
+.btn-challenge:hover { transform: translate(-3px,-3px) scale(1.02); box-shadow: 6px 6px 0 var(--dark), 0 0 24px rgba(124,58,237,0.5); }
+.btn-challenge:active { transform: translate(2px,2px); }
+
+/* Floating particles on the challenge button */
+.challenge-btn-wrap { position: relative; width: 100%; }
+.challenge-btn-wrap .c-particle {
+  position: absolute;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: cParticleFloat 2.5s ease-in-out infinite;
+  opacity: 0;
+}
+.challenge-btn-wrap .c-particle:nth-child(1){ background:#C8FF00; top:-10px; left:15%; animation-delay:0s; }
+.challenge-btn-wrap .c-particle:nth-child(2){ background:#FF3D8A; top:-14px; left:40%; animation-delay:0.4s; width:9px;height:9px; }
+.challenge-btn-wrap .c-particle:nth-child(3){ background:#4CC9F0; top:-8px;  left:65%; animation-delay:0.8s; }
+.challenge-btn-wrap .c-particle:nth-child(4){ background:#FFD93D; top:-12px; left:82%; animation-delay:1.2s; width:6px;height:6px; }
+.challenge-btn-wrap .c-particle:nth-child(5){ background:#A78BFA; top:-10px; left:5%;  animation-delay:1.6s; }
+@keyframes cParticleFloat {
+  0%   { opacity:0; transform: translateY(0) scale(0.5); }
+  30%  { opacity:1; transform: translateY(-14px) scale(1); }
+  70%  { opacity:1; transform: translateY(-22px) scale(0.9); }
+  100% { opacity:0; transform: translateY(-30px) scale(0.5); }
+}
+
+/* Sword icons flanking button text */
+.challenge-btn-inner { display:flex; align-items:center; justify-content:center; gap:8px; }
+.sword-icon {
+  font-size:18px;
+  display:inline-block;
+  animation: swordWiggle 1.8s ease-in-out infinite;
+}
+.sword-icon.left  { animation-direction: normal; }
+.sword-icon.right { animation-direction: reverse; }
+@keyframes swordWiggle {
+  0%,100%{ transform: rotate(-10deg) scale(1); }
+  50%    { transform: rotate(10deg) scale(1.1); }
+}
+
+/* ── Challenge Banner on Name Screen ── */
+.challenge-incoming-banner {
+  display: none;
+  background: linear-gradient(135deg, #1a0533, #0d1f6e);
+  border: 2.5px solid var(--dark);
+  border-radius: 20px;
+  padding: 18px 16px 14px;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 5px 5px 0 var(--dark);
+}
+.challenge-incoming-banner.show { display: block; animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1); }
+.cib-bg-glow {
+  position:absolute; inset:0; border-radius:18px; overflow:hidden; pointer-events:none;
+  background: radial-gradient(ellipse at 50% -20%, rgba(124,58,237,0.4), transparent 70%);
+}
+.cib-swords { font-size: 28px; display:block; margin-bottom:6px; animation: swordsClash 1.5s ease-in-out infinite; }
+@keyframes swordsClash {
+  0%,100%{ transform: scale(1) rotate(-5deg); }
+  50%    { transform: scale(1.15) rotate(5deg); }
+}
+.cib-label {
+  font-family: 'Righteous', cursive;
+  font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,0.55);
+  text-transform: uppercase; display:block; margin-bottom:4px; position:relative;z-index:1;
+}
+.cib-headline {
+  font-family: 'Fredoka One', cursive;
+  font-size: 21px; color: #fff; line-height: 1.25;
+  display:block; margin-bottom:6px; position:relative;z-index:1;
+}
+.cib-headline span { color: #C8FF00; }
+.cib-score-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background: rgba(255,255,255,0.12); border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 50px; padding: 4px 14px;
+  font-family: 'Righteous', cursive; font-size: 14px; color: #fff;
+  position:relative;z-index:1;
+}
+.cib-score-badge .s-num { font-size:18px; color:#C8FF00; font-weight:900; }
+
+/* ── VS Banner on Result Screen ── */
+.vs-banner {
+  display: none;
+  border-radius: 18px;
+  border: 2.5px solid var(--dark);
+  box-shadow: 5px 5px 0 var(--dark);
+  margin: 12px 0 16px;
+  overflow: hidden;
+  animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1);
+}
+.vs-banner.show { display: block; }
+.vs-banner-win  { background: linear-gradient(135deg, #0f3d20, #1a6b38); }
+.vs-banner-lose { background: linear-gradient(135deg, #3d0f0f, #6b1a1a); }
+.vs-banner-tie  { background: linear-gradient(135deg, #2a2a00, #5a5a00); }
+.vs-inner { display:flex; align-items:stretch; }
+.vs-player-col {
+  flex:1; padding: 14px 10px; text-align:center;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+}
+.vs-player-col .vsp-label { font-size:10px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.5); }
+.vs-player-col .vsp-name  { font-family:'Fredoka One',cursive; font-size:15px; color:#fff; word-break:break-word; }
+.vs-player-col .vsp-score { font-family:'Fredoka One',cursive; font-size:36px; color:#C8FF00; line-height:1; }
+.vs-player-col .vsp-score.loser { color: rgba(255,255,255,0.4); font-size:28px; }
+.vs-middle { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 8px; }
+.vs-badge { font-family:'Fredoka One',cursive; font-size:18px; color:#fff; background:rgba(255,255,255,0.15); border-radius:8px; padding:4px 10px; }
+.vs-result-label {
+  width:100%; padding:10px 14px;
+  font-family:'Righteous',cursive; font-size:14px; font-weight:800; letter-spacing:0.5px;
+  color:#fff; text-align:center;
+  background:rgba(0,0,0,0.25);
+}
+
+/* ── Crown Lottie Overlay ── */
+#crownOverlay {
+  position: fixed; inset:0; z-index: 10000;
+  display:none; align-items:center; justify-content:center;
+  flex-direction:column;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.3s ease;
+}
+#crownOverlay.show { display:flex; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.crown-lottie-wrap { width:220px; height:220px; margin-bottom:8px; }
+.crown-headline {
+  font-family:'Fredoka One',cursive; font-size:36px; color:#FFD93D;
+  text-align:center; text-shadow: 0 4px 0 rgba(0,0,0,0.4);
+  animation: crownPop 0.5s cubic-bezier(.34,1.56,.64,1) 0.3s both;
+}
+.crown-sub {
+  font-size:16px; font-weight:800; color:rgba(255,255,255,0.8);
+  text-align:center; margin-top:4px;
+  animation: crownPop 0.5s cubic-bezier(.34,1.56,.64,1) 0.5s both;
+}
+@keyframes crownPop { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
+.crown-dismiss {
+  margin-top:24px;
+  background: #FFD93D; color: var(--dark);
+  font-family:'Fredoka One',cursive; font-size:17px; letter-spacing:1px;
+  padding:12px 36px; border-radius:14px; border:2.5px solid var(--dark);
+  box-shadow:4px 4px 0 var(--dark); cursor:pointer;
+  animation: crownPop 0.5s cubic-bezier(.34,1.56,.64,1) 0.7s both;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.crown-dismiss:hover  { transform: translate(-2px,-2px); box-shadow:6px 6px 0 var(--dark); }
+.crown-dismiss:active { transform: translate(2px,2px);  box-shadow:2px 2px 0 var(--dark); }
+
+/* ═══════════════════════════════════
    GAMIFICATION: C4 TNT & COMBO UI
 ═══════════════════════════════════ */
 #quizCard.quiz-card {
@@ -549,9 +728,21 @@ p.sub { font-size: 14px; color: var(--grey); font-weight: 500; margin-bottom: 20
   <div id="nameScreen" class="screen active">
     <div class="card" style="display:flex;flex-direction:column;align-items:center;">
       <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" class="logo" alt="TTC">
-      <div class="chip">✦ TTC Wardha</div>
-      <h2>Hey there!<br>What's your name?</h2>
-      <p class="sub">Enter your name to start the quiz 🎯</p>
+
+      <!-- ⚔️ Challenge Incoming Banner (shown only when ?c= param present) -->
+      <div class="challenge-incoming-banner" id="challengeIncomingBanner">
+        <div class="cib-bg-glow"></div>
+        <span class="cib-swords">⚔️</span>
+        <span class="cib-label">You've been challenged!</span>
+        <span class="cib-headline" id="cibHeadline">Someone challenged you!<br>Can you <span>beat their score?</span></span>
+        <div class="cib-score-badge">
+          🏆 They scored: <span class="s-num" id="cibScoreDisplay">?</span>
+        </div>
+      </div>
+
+      <div class="chip" id="nameChip">✦ TTC Wardha</div>
+      <h2 id="nameH2">Hey there!<br>What's your name?</h2>
+      <p class="sub" id="nameSub">Enter your name to start the quiz 🎯</p>
       <input id="username" class="input-field" type="text" placeholder="Your full name..." autocomplete="off" required>
       <button class="btn btn-blue" onclick="startWelcome()">Continue →</button>
     </div>
@@ -679,7 +870,44 @@ p.sub { font-size: 14px; color: var(--grey); font-weight: 500; margin-bottom: 20
         <span class="feedback-info-text vibe-label" id="quizFeedbackText">It was okay</span>
       </div>
 
+      <!-- ⚔️ VS Banner (shown only if player came from a challenge link) -->
+      <div class="vs-banner" id="vsBanner">
+        <div class="vs-inner">
+          <div class="vs-player-col">
+            <span class="vsp-label">You</span>
+            <span class="vsp-name" id="vsYouName">—</span>
+            <span class="vsp-score" id="vsYouScore">0</span>
+          </div>
+          <div class="vs-middle">
+            <span class="vs-badge">VS</span>
+          </div>
+          <div class="vs-player-col">
+            <span class="vsp-label">Challenger</span>
+            <span class="vsp-name" id="vsThemName">—</span>
+            <span class="vsp-score" id="vsThemScore">0</span>
+          </div>
+        </div>
+        <div class="vs-result-label" id="vsResultLabel">🏆 Challenge Result</div>
+      </div>
+
       <button class="btn btn-green" onclick="shareWhatsApp()">📤 Share on WhatsApp</button>
+
+      <!-- ⚔️ Challenge a Friend Button -->
+      <div class="challenge-btn-wrap" id="challengeBtnWrap">
+        <div class="c-particle"></div>
+        <div class="c-particle"></div>
+        <div class="c-particle"></div>
+        <div class="c-particle"></div>
+        <div class="c-particle"></div>
+        <button class="btn btn-challenge" onclick="shareChallenge()" id="challengeBtn">
+          <span class="challenge-btn-inner">
+            <span class="sword-icon left">⚔️</span>
+            <span>Challenge a Friend!</span>
+            <span class="sword-icon right">⚔️</span>
+          </span>
+        </button>
+      </div>
+
       <button class="btn btn-blue" onclick="downloadStudentPdf()">Download PDF Report</button>
       <button id="ratingBtn" class="btn btn-pink">⭐ Rate Us on Google</button>
       <button class="btn btn-ghost" onclick="restartQuiz()">↺ Try Again</button>
@@ -692,6 +920,23 @@ p.sub { font-size: 14px; color: var(--grey); font-weight: 500; margin-bottom: 20
       </div>
     </div>
   </div>
+</div>
+
+<!-- 👑 Crown Victory Overlay (shown when player beats a challenger) -->
+<div id="crownOverlay">
+  <div class="crown-lottie-wrap">
+    <lottie-player
+      id="crownLottie"
+      src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f451/lottie.json"
+      background="transparent"
+      speed="1"
+      style="width:100%;height:100%;"
+      autoplay>
+    </lottie-player>
+  </div>
+  <div class="crown-headline" id="crownHeadline">👑 You're the Champion!</div>
+  <div class="crown-sub" id="crownSub">You beat the challenge!</div>
+  <button class="crown-dismiss" onclick="document.getElementById('crownOverlay').classList.remove('show')">🎉 Claim Victory!</button>
 </div>
  
 <script>
@@ -932,6 +1177,78 @@ const quizData=[
     }
 ];
  
+/* ════════════════════════
+   CHALLENGE ENGINE
+════════════════════════ */
+let challengeData = null; // {n: name, s: score, t: total}
+
+(function parseChallengeParam(){
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get('c');
+    if (!raw) return;
+    const decoded = JSON.parse(atob(raw));
+    if (decoded && decoded.n && typeof decoded.s === 'number' && typeof decoded.t === 'number') {
+      challengeData = decoded;
+      // Update name screen UI
+      const banner = document.getElementById('challengeIncomingBanner');
+      const headline = document.getElementById('cibHeadline');
+      const scoreEl = document.getElementById('cibScoreDisplay');
+      const chip = document.getElementById('nameChip');
+      const h2 = document.getElementById('nameH2');
+      const sub = document.getElementById('nameSub');
+      if (banner) {
+        if (headline) headline.innerHTML = `⚔️ <span>${challengeData.n}</span> has challenged you!<br>They scored <span>${challengeData.s}/${challengeData.t}</span>. Can you beat them?`;
+        if (scoreEl) scoreEl.textContent = `${challengeData.s}/${challengeData.t}`;
+        banner.classList.add('show');
+      }
+      if (chip) chip.textContent = '⚔️ Challenge Accepted!';
+      if (h2) h2.innerHTML = `Enter your name<br>and play the quiz!`;
+      if (sub) sub.textContent = `⚔️ ${challengeData.n} has challenged you! They scored ${challengeData.s}/${challengeData.t}. Enter your name and play the quiz to see if you can beat them!`;
+    }
+  } catch(e) {}
+})();
+
+function generateChallengeLink(){
+  const total = questions.length || quizData.length;
+  const payload = { n: username, s: score, t: total };
+  const encoded = btoa(JSON.stringify(payload));
+  const base = window.location.origin + window.location.pathname;
+  return base + '?c=' + encoded;
+}
+
+async function shareChallenge(){
+  const link = generateChallengeLink();
+  const total = questions.length || quizData.length;
+  const pct = total ? Math.round((score / total) * 100) : 0;
+  const emojiScore = pct >= 90 ? '🔥' : pct >= 75 ? '💪' : pct >= 50 ? '📚' : '🧐';
+  const text = `${emojiScore} I scored ${score}/${total} on the ${chapterName} quiz! 🏆\n\nThink you can beat me? Challenge accepted?\nClick the link to take the same quiz and see if you can top my score! ⚔️`;
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: `⚔️ ${username} is challenging you! — TTC Quiz`, text: text, url: link });
+    } catch(e) {
+      if (e.name !== 'AbortError') fallbackCopyChallenge(link);
+    }
+  } else {
+    fallbackCopyChallenge(link);
+  }
+}
+
+function fallbackCopyChallenge(link){
+  navigator.clipboard.writeText(link).then(() => {
+    const btn = document.getElementById('challengeBtn');
+    if (btn) {
+      btn.querySelector('span.challenge-btn-inner').innerHTML = '✅ Link Copied!';
+      setTimeout(() => {
+        btn.querySelector('span.challenge-btn-inner').innerHTML = '<span class="sword-icon left">⚔️</span><span>Challenge a Friend!</span><span class="sword-icon right">⚔️</span>';
+      }, 2500);
+    }
+  }).catch(() => {
+    const wa = `https://wa.me/?text=${encodeURIComponent((typeof username !== 'undefined' ? `⚔️ ${username} challenged you! ` : '') + link)}`;
+    window.open(wa);
+  });
+}
+
 let username='', questions=[], qIndex=0, score=0;
 let streak=0;
 window.milestoneTimeout=null;
@@ -1132,6 +1449,61 @@ function showResult(){
   document.getElementById("resultChip").innerText=chipText; document.getElementById("scorePct").style.background=pctBg;
   confetti({particleCount:180,spread:110,origin:{y:0.45},colors:["#4361EE","#C8FF00","#FF3D8A","#FF6B35","#ffffff"]});
   sendToSheet(total, pct);
+
+  // ── Challenge Showdown Logic ──
+  const vsBanner = document.getElementById('vsBanner');
+  if (challengeData && vsBanner) {
+    const youScore = score;
+    const themScore = challengeData.s;
+    const themName = challengeData.n;
+    const themTotal = challengeData.t;
+
+    document.getElementById('vsYouName').textContent  = username || 'You';
+    document.getElementById('vsThemName').textContent = themName;
+    document.getElementById('vsYouScore').textContent  = `${youScore}/${total}`;
+    document.getElementById('vsThemScore').textContent = `${themScore}/${themTotal}`;
+
+    vsBanner.classList.remove('vs-banner-win','vs-banner-lose','vs-banner-tie');
+    const resultLabel = document.getElementById('vsResultLabel');
+
+    const youPct  = youScore / total;
+    const themPct = themScore / themTotal;
+
+    if (youPct > themPct) {
+      // WINNER!
+      vsBanner.classList.add('vs-banner-win');
+      resultLabel.textContent = '🏆 You Won the Challenge! Incredible!';
+      document.getElementById('vsYouScore').classList.remove('loser');
+      document.getElementById('vsThemScore').classList.add('loser');
+      // Show crown overlay with a short delay after result confetti
+      setTimeout(() => {
+        const overlay = document.getElementById('crownOverlay');
+        const crownHeadline = document.getElementById('crownHeadline');
+        const crownSub = document.getElementById('crownSub');
+        if (crownHeadline) crownHeadline.textContent = `👑 ${username} is the Champion!`;
+        if (crownSub) crownSub.textContent = `You beat ${themName}'s score of ${themScore}/${themTotal}!`;
+        if (overlay) overlay.classList.add('show');
+        // Extra celebration confetti
+        confetti({particleCount:250,spread:160,origin:{y:0.3},colors:['#FFD93D','#FF3D8A','#C8FF00','#4361EE','#fff']});
+        setTimeout(()=>confetti({particleCount:150,spread:100,origin:{y:0.6},angle:60,colors:['#FFD93D','#A78BFA']}),400);
+        setTimeout(()=>confetti({particleCount:150,spread:100,origin:{y:0.6},angle:120,colors:['#4CC9F0','#FF6B35']}),800);
+      }, 1200);
+    } else if (youPct === themPct) {
+      // TIE
+      vsBanner.classList.add('vs-banner-tie');
+      resultLabel.textContent = `🤝 It's a Tie! Both scored ${youScore}/${total}!`;
+      document.getElementById('vsYouScore').classList.remove('loser');
+      document.getElementById('vsThemScore').classList.remove('loser');
+    } else {
+      // LOSS
+      vsBanner.classList.add('vs-banner-lose');
+      resultLabel.textContent = `😤 ${themName} wins this round! Keep grinding!`;
+      document.getElementById('vsYouScore').classList.add('loser');
+      document.getElementById('vsThemScore').classList.remove('loser');
+    }
+
+    vsBanner.classList.add('show');
+  }
 }
  
 function sendToSheet(total, pct){
