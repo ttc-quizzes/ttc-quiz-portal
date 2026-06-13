@@ -121,7 +121,77 @@ layout: null
       display: flex;
       flex-direction: column;
     }
+/* Header Button Group */
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
 
+.btn-outline {
+  background: transparent;
+  color: var(--dark);
+  border: 2px solid rgba(17, 17, 24, 0.12);
+  box-shadow: none;
+  cursor: pointer;
+}
+.btn-outline:hover {
+  background: var(--light);
+  color: var(--dark);
+  box-shadow: 0 4px 12px rgba(17, 17, 24, 0.08);
+}
+
+/* Dynamic Island */
+.dynamic-island {
+  position: fixed;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background: #000;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 30px;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  pointer-events: none;
+  min-width: 180px;
+  text-align: center;
+}
+.dynamic-island.active {
+  top: 24px;
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+  visibility: visible;
+}
+.di-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+.di-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: di-spin 1s linear infinite;
+}
+@keyframes di-spin { 100% { transform: rotate(360deg); } }
+
+/* Mobile Adjustments for 2 buttons */
+@media (max-width: 650px) {
+  .header-actions { gap: 6px; }
+  .header-cta { padding: 8px 12px; font-size: 11px; }
+  .btn-outline { border: 1.5px solid rgba(17, 17, 24, 0.12); }
+}
+    
     /* Mobile-first premium header */
     header {
       background: rgba(255, 255, 255, 0.86);
@@ -1209,6 +1279,12 @@ layout: null
 <body>
 
   <!-- HEADER -->
+  <div id="dynamicIsland" class="dynamic-island">
+  <div class="di-content">
+    <span id="diIcon" class="di-icon"></span>
+    <span id="diText" class="di-text">Installing...</span>
+  </div>
+</div>
   <header>
     <a href="{{ site.baseurl }}/" class="brand">
       <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" alt="TTC Logo">
@@ -1217,9 +1293,11 @@ layout: null
         <div class="brand-sub">Platform</div>
       </div>
     </a>
-    <a href="https://g.page/r/CdUkswJ0ZulAEBE/review" target="_blank" class="header-cta">
-      Join Offline Classes
-    </a>
+    <!-- ADD THIS INSTEAD -->
+<div class="header-actions">
+  <button id="installAppBtn" class="header-cta btn-outline">Install TTC Quiz App</button>
+  <a href="https://tusharnanwani80-rgb.github.io/TTC-Parent-Dashboard/" target="_blank" class="header-cta">Visit our website</a>
+</div>
   </header>
 
   <!-- HERO SECTION -->
@@ -1594,6 +1672,76 @@ layout: null
           });
       });
     }
+    // --- PWA INSTALLATION & DYNAMIC ISLAND LOGIC ---
+let deferredPrompt;
+const installAppBtn = document.getElementById('installAppBtn');
+const dynamicIsland = document.getElementById('dynamicIsland');
+const diText = document.getElementById('diText');
+const diIcon = document.getElementById('diIcon');
+
+// 1. Check if already installed
+const isAppInstalled = () => {
+  return window.matchMedia('(display-mode: standalone)').matches || 
+         navigator.standalone || 
+         document.referrer.includes('android-app://');
+};
+
+// 2. Catch the install prompt event
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+// 3. Dynamic Island Controller
+function showDynamicIsland(text, type = 'info', duration = 3000) {
+  diText.textContent = text;
+  
+  if (type === 'loading') {
+     diIcon.innerHTML = '<div class="di-spinner"></div>';
+  } else if (type === 'success') {
+     diIcon.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+  } else {
+     diIcon.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+  }
+
+  dynamicIsland.classList.add('active');
+
+  if (duration > 0) {
+    setTimeout(() => {
+      dynamicIsland.classList.remove('active');
+    }, duration);
+  }
+}
+
+// 4. Handle Button Click
+installAppBtn.addEventListener('click', async () => {
+  if (isAppInstalled()) {
+    showDynamicIsland('App is already installed', 'info', 3500);
+    return;
+  }
+
+  if (deferredPrompt) {
+    // Show installing animation (stays open until promise resolves)
+    showDynamicIsland('Installing TTC Quiz...', 'loading', 0); 
+    
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    if (outcome === 'accepted') {
+      // Keep loading spinner for ~3 seconds to simulate install time, then show success
+      setTimeout(() => {
+        showDynamicIsland('App Installed!', 'success', 4000);
+      }, 3000);
+      deferredPrompt = null;
+    } else {
+      // User cancelled
+      dynamicIsland.classList.remove('active'); 
+    }
+  } else {
+     // Fallback if browser blocks it or not supported
+     showDynamicIsland('Install from browser menu', 'info', 3500);
+  }
+});
   </script>
 </body>
 </body>
