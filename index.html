@@ -421,6 +421,159 @@ layout: null
       .hero-proof-row { margin-left: 0; margin-right: 0; }
     }
 
+/* =========================================
+       THE INLINE ACCORDION MARQUEE (CHIBI ANIMATED)
+       ========================================= */
+    .initiative-box {
+      width: 100%;
+      max-width: 700px; /* Made slightly wider to fit full names comfortably */
+      margin: 0 auto 32px;
+      background: var(--white);
+      border: 2.5px solid var(--dark);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 6px 6px 0 rgba(17, 17, 24, 0.06);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .initiative-box:hover {
+      box-shadow: 8px 8px 0 var(--lime);
+      transform: translateY(-2px);
+    }
+    .initiative-reveal {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .initiative-reveal.open {
+      grid-template-rows: 1fr;
+    }
+    .reveal-inner {
+      overflow: visible; /* Required so heads don't get chopped off at the top */
+    }
+    .creator-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 30px 16px 20px; /* Extra top padding for popping heads */
+      justify-content: center;
+      background: var(--off);
+      border-bottom: 2.5px solid var(--dark);
+      overflow: visible;
+    }
+    .creator-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--white);
+      border: 2px solid var(--dark);
+      padding: 6px 18px 6px 8px;
+      border-radius: 50px;
+      box-shadow: 2px 2px 0 rgba(17, 17, 24, 0.1);
+      
+      /* Peek-a-boo Initial State */
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+    }
+    .initiative-reveal.open .creator-badge.delay-1 { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+    .initiative-reveal.open .creator-badge.delay-2 { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+    .initiative-reveal.open .creator-badge.delay-3 { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+    .creator-badge:hover {
+      box-shadow: 4px 4px 0 var(--dark);
+      transform: translateY(-2px) !important;
+      transition-delay: 0s !important;
+    }
+    
+    /* THE CHIBI AVATAR CONTAINER */
+    .c-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--dark);
+      position: relative;
+      background: var(--blue);
+      /* Remove overflow: hidden from here so heads can pop out */
+    }
+    .ca-1 { background: var(--blue); }
+    .ca-2 { background: var(--pink); }
+    .ca-3 { background: var(--orange); }
+    
+    /* THE CLIP PATH WRAPPER - This is the magic part */
+    .c-avatar-clip {
+      position: absolute;
+      /* Expand the wrapper upward to allow the head to pop out */
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 150%; 
+      /* Clip to a circle at the bottom, but open at the top */
+      clip-path: polygon(-50% -50%, 150% -50%, 150% 50%, 100% 50%, 100% 100%, 0% 100%, 0% 50%, -50% 50%);
+      border-radius: 0 0 22px 22px; /* Match half the width (44/2) for perfect bottom curve */
+      overflow: hidden;
+    }
+    
+    /* THE CHIBI IMAGE */
+    .chibi-img {
+      position: absolute;
+      bottom: -2px; /* Pull down slightly to cover any sub-pixel gaps */
+      left: 50%;
+      width: 140%; 
+      height: 100%; /* Relative to the taller wrapper */
+      object-fit: contain;
+      object-position: bottom center; /* Keep feet planted at bottom */
+      transform: translateX(-50%);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none; 
+    }
+    
+    /* Playful Micro-Interactions */
+    .creator-badge:hover .ca-1 .chibi-img { transform: translateX(-50%) scale(1.15) rotate(-4deg); }
+    .creator-badge:hover .ca-2 .chibi-img { transform: translateX(-50%) scale(1.15) translateY(-4px); }
+    .creator-badge:hover .ca-3 .chibi-img { transform: translateX(-50%) scale(1.15) rotate(4deg); }
+    
+    .c-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--dark);
+      white-space: nowrap; /* Prevents long names from wrapping */
+    }
+
+    .marquee-trigger {
+      width: 100%;
+      background: var(--dark);
+      color: var(--lime);
+      border: none;
+      padding: 12px 0;
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      outline: none;
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: scrollMarquee 15s linear infinite;
+    }
+    .marquee-trigger:hover .marquee-track {
+      animation-play-state: paused;
+    }
+    .marquee-text {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      padding-right: 20px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .marquee-text span {
+      color: var(--white);
+    }
+    @keyframes scrollMarquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
     /* Search Bar */
     .search-container {
       position: relative;
@@ -1332,6 +1485,57 @@ layout: null
         <h1>Exam-ready quizzes for every <span>chapter.</span></h1>
         <p>Search your class, pick a chapter, answer MCQs, and get instant explanations for CBSE and ICSE-style exam practice.</p>
         
+<!-- THE INLINE ACCORDION MARQUEE WITH CHIBIS -->
+        <div class="initiative-box">
+          <!-- Hidden Reveal Area -->
+          <div class="initiative-reveal" id="initiativeReveal">
+            <div class="reveal-inner">
+              <div class="creator-cards">
+                
+                <!-- Tushar -->
+                <button class="creator-badge delay-1" onclick="openCreatorModal('tushar')">
+                  <div class="c-avatar ca-1">
+                    <div class="c-avatar-clip">
+                      <img src="https://i.postimg.cc/bNR5qNkG/Whats-App-Image-2026-08-08-at-8-07-20-PM.png" alt="Tushar Nanwani" class="chibi-img">
+                    </div>
+                  </div>
+                  <span class="c-name">Tushar Nanwani</span>
+                </button>
+                
+                <!-- Mahek -->
+                <button class="creator-badge delay-2" onclick="openCreatorModal('mahek')">
+                  <div class="c-avatar ca-2">
+                     <div class="c-avatar-clip">
+                      <img src="https://i.postimg.cc/ZKhkTMQs/Remove-background-project-August-08-2026-at-20-10-59.png" alt="Mahek Nanwani" class="chibi-img">
+                     </div>
+                  </div>
+                  <span class="c-name">Mahek Nanwani</span>
+                </button>
+                
+                <!-- Kajal -->
+                <button class="creator-badge delay-3" onclick="openCreatorModal('kajal')">
+                  <div class="c-avatar ca-3">
+                    <div class="c-avatar-clip">
+                      <img src="https://i.postimg.cc/s2GKGVQc/Whats-App-Image-2026-08-08-at-8-07-21-PM-(1).png" alt="Kajal Nanwani" class="chibi-img">
+                    </div>
+                  </div>
+                  <span class="c-name">Kajal Nanwani</span>
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Clickable Marquee Footer -->
+          <button class="marquee-trigger" onclick="toggleInitiative()" aria-label="Meet the team">
+            <div class="marquee-track">
+              <div class="marquee-text">✦ A PROUD INITIATIVE BY <span>TUSHAR NANWANI, MAHEK NANWANI & KAJAL NANWANI</span> — TAP TO MEET THE TEAM ✦</div>
+              <div class="marquee-text">✦ A PROUD INITIATIVE BY <span>TUSHAR NANWANI, MAHEK NANWANI & KAJAL NANWANI</span> — TAP TO MEET THE TEAM ✦</div>
+            </div>
+          </button>
+        </div>
+        <!-- END ACCORDION -->
+
         <div class="search-container">
           <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <input type="text" id="searchInput" class="search-bar" placeholder="Search for a chapter (e.g. Integers)...">
@@ -1557,7 +1761,7 @@ layout: null
     </div>
   </footer>
 
-  <!-- Scripts: Filter, Search, and FAQ Logic -->
+  <!-- Scripts: Filter, Search, Marquee, Modal, and FAQ Logic -->
   <script>
     const TTC_STATS_URL = 'https://script.google.com/macros/s/AKfycbyzrJ7T76IeXnPwbqTqV8Mksc7JRnbaVBgbUXVeX1fBXLWtdxS6XOgr4wC0_LqILaGj/exec';
     const TTC_STATS_TIMEOUT_MS = 1000;
